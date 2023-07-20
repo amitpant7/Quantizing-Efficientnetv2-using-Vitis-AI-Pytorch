@@ -1,16 +1,7 @@
-# Copyright 2019 Xilinx Inc.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+# Evaluates the model in test set of CIFAR10 dataset
+import torch.nn as nn
+from torchvision.models import efficientnet_v2_s
+from tqdm import tqdm
 import os
 import re
 import sys
@@ -27,10 +18,7 @@ import numpy as np
 sys.path.append('./code/model/')
 
 
-from tqdm import tqdm
 # from efficientnet import efficientnet_v2_s
-from torchvision.models import efficientnet_v2_s
-import torch.nn as nn
 
 parser = argparse.ArgumentParser()
 
@@ -66,16 +54,17 @@ parser.add_argument(
     default='gpu',
     choices=['gpu', 'cpu'])
 parser.add_argument('--export_float_onnx_model',
-    action='store_true',
-    help='export float onnx model')
+                    action='store_true',
+                    help='export float onnx model')
 args, _ = parser.parse_known_args()
 
 
 if args.device == 'cpu':
     device = torch.device("cpu")
     print('Set device to CPU')
-else:    
+else:
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
 
 def load_data(train=True,
               data_dir='data/CIFAR10',
@@ -87,21 +76,22 @@ def load_data(train=True,
               **kwargs):
     valdir = os.path.join(data_dir, 'cifar10-python')
     print(valdir)
-    normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-    if model_name =='inceptionv3':
+    normalize = transforms.Normalize(
+        mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+    if model_name == 'inceptionv3':
         size = 299
         resize = 299
     else:
         size = 224
         resize = 224
-    dataset = torchvision.datasets.CIFAR10(root=valdir, 
-                    train=False, 
-                    download=False,
-                    transform = transforms.Compose([
-                         transforms.Resize(224),
-                          transforms.ToTensor(),
-                         normalize]
-                            ))
+    dataset = torchvision.datasets.CIFAR10(root=valdir,
+                                           train=False,
+                                           download=False,
+                                           transform=transforms.Compose([
+                                               transforms.Resize(224),
+                                               transforms.ToTensor(),
+                                               normalize]
+                                           ))
     if subset_len:
         assert subset_len <= len(dataset)
         if sample_method == 'random':
@@ -113,76 +103,80 @@ def load_data(train=True,
         dataset, batch_size=batch_size, shuffle=False, **kwargs)
     return data_loader
 
+
 class AverageMeter(object):
-  """Computes and stores the average and current value"""
+    """Computes and stores the average and current value"""
 
-  def __init__(self, name, fmt=':f'):
-    self.name = name
-    self.fmt = fmt
-    self.reset()
+    def __init__(self, name, fmt=':f'):
+        self.name = name
+        self.fmt = fmt
+        self.reset()
 
-  def reset(self):
-    self.val = 0
-    self.avg = 0
-    self.sum = 0
-    self.count = 0
+    def reset(self):
+        self.val = 0
+        self.avg = 0
+        self.sum = 0
+        self.count = 0
 
-  def update(self, val, n=1):
-    self.val = val
-    self.sum += val * n
-    self.count += n
-    self.avg = self.sum / self.count
+    def update(self, val, n=1):
+        self.val = val
+        self.sum += val * n
+        self.count += n
+        self.avg = self.sum / self.count
 
-  def __str__(self):
-    fmtstr = '{name} {val' + self.fmt + '} ({avg' + self.fmt + '})'
-    return fmtstr.format(**self.__dict__)
+    def __str__(self):
+        fmtstr = '{name} {val' + self.fmt + '} ({avg' + self.fmt + '})'
+        return fmtstr.format(**self.__dict__)
+
 
 def accuracy(output, target, topk=(1,)):
-  """Computes the accuracy over the k top predictions
-    for the specified values of k"""
-  with torch.no_grad():
-    maxk = max(topk)
-    batch_size = target.size(0)
+    """Computes the accuracy over the k top predictions
+      for the specified values of k"""
+    with torch.no_grad():
+        maxk = max(topk)
+        batch_size = target.size(0)
 
-    _, pred = output.topk(maxk, 1, True, True)
-    pred = pred.t()
-    correct = pred.eq(target.view(1, -1).expand_as(pred))
+        _, pred = output.topk(maxk, 1, True, True)
+        pred = pred.t()
+        correct = pred.eq(target.view(1, -1).expand_as(pred))
 
-    res = []
-    for k in topk:
-      correct_k = correct[:k].flatten().float().sum(0, keepdim=True)
-      res.append(correct_k.mul_(100.0 / batch_size))
-    return res
+        res = []
+        for k in topk:
+            correct_k = correct[:k].flatten().float().sum(0, keepdim=True)
+            res.append(correct_k.mul_(100.0 / batch_size))
+        return res
+
 
 def to_numpy(tensor):
     return tensor.detach().cpu().numpy() if tensor.requires_grad else tensor.cpu().numpy()
 
+
 def evaluate(model, val_loader, loss_fn, model_type, data_type='float32'):
 
-  top1 = AverageMeter('Acc@1', ':6.2f')
-  top5 = AverageMeter('Acc@5', ':6.2f')
-  total = 0
-  Loss = 0
-  for iteraction, (images, labels) in tqdm(
-      enumerate(val_loader), total=len(val_loader)):
-    if model_type == 'pth':
-        images = images.to(device)
-        outputs = model(images)
-    else: # model_type == 'onnx'
-        if data_type=='float16':
-            images = images.half()
-        outputs = model.run({'input': images.cpu().numpy()})[0]
-        outputs = torch.tensor(np.array(outputs))
-    outputs = outputs.to(device)
-    labels = labels.to(device)
-    total += images.size(0)
-    acc1, acc5 = accuracy(outputs.to(torch.float32), labels, topk=(1, 5))
-    top1.update(acc1[0], images.size(0))
-    top5.update(acc5[0], images.size(0))
-    if (iteraction!=0 and iteraction % 1000==0):
-        print('image_size=%d,\t top1=%.1f,\t top5=%.1f' % (images.size(2), top1.avg, top5.avg))
-  return top1.avg, top5.avg, Loss / total
-
+    top1 = AverageMeter('Acc@1', ':6.2f')
+    top5 = AverageMeter('Acc@5', ':6.2f')
+    total = 0
+    Loss = 0
+    for iteraction, (images, labels) in tqdm(
+            enumerate(val_loader), total=len(val_loader)):
+        if model_type == 'pth':
+            images = images.to(device)
+            outputs = model(images)
+        else:  # model_type == 'onnx'
+            if data_type == 'float16':
+                images = images.half()
+            outputs = model.run({'input': images.cpu().numpy()})[0]
+            outputs = torch.tensor(np.array(outputs))
+        outputs = outputs.to(device)
+        labels = labels.to(device)
+        total += images.size(0)
+        acc1, acc5 = accuracy(outputs.to(torch.float32), labels, topk=(1, 5))
+        top1.update(acc1[0], images.size(0))
+        top5.update(acc5[0], images.size(0))
+        if (iteraction != 0 and iteraction % 1000 == 0):
+            print('image_size=%d,\t top1=%.1f,\t top5=%.1f' %
+                  (images.size(2), top1.avg, top5.avg))
+    return top1.avg, top5.avg, Loss / total
 
 
 def main(model_name=''):
@@ -191,18 +185,18 @@ def main(model_name=''):
     subset_len = args.subset_len
     print("=== Load pretrained model ===")
 
-            
     print('Model name:', model_name)
     model_type = args.model_path.split('.')[-1]
     print('Model type:', model_type)
     if model_type not in ['onnx', 'pth']:
-        print(f'[Error] Evaluating model type \"{model_type} \" is not supported yet')
-        return 
+        print(
+            f'[Error] Evaluating model type \"{model_type} \" is not supported yet')
+        return
 
     print('Loading model:', args.model_path)
     if model_type == 'pth':
-        model = efficientnet_v2_s() 
-        num_ftrs = model.classifier[1].in_features 
+        model = efficientnet_v2_s()
+        num_ftrs = model.classifier[1].in_features
         model.classifier[1] = nn.Linear(num_ftrs, 10)
         model.load_state_dict(torch.load(args.model_path))
         model = model.to(device)
@@ -212,29 +206,32 @@ def main(model_name=''):
         print('Evaluating onnx model using AMD MIGRAPHX')
         model = migraphx.parse_onnx(args.model_path)
         model.compile(migraphx.get_target("gpu"))
-    
+
     if args.export_float_onnx_model:
         print('Exporting float onnx model')
         input = torch.randn([1, 3, 299, 299])
         model = model.cpu()
         model.eval()
-        model_name='efficientnetv2'
-        torch.onnx.export(model, input, '{}_fp32.onnx'.format(model_name), input_names=['input'],output_names=['output'],dynamic_axes={'input' : {0 : 'batch_size'},'output' : {0 : 'batch_size'}})
-        model=model.cuda().half().eval() 
-        torch.onnx.export(model, input.cuda().half(), '{}_fp16.onnx'.format(model_name), input_names=['input'],output_names=['output'],dynamic_axes={'input' : {0 : 'batch_size'},'output' : {0 : 'batch_size'}})
-        return 
+        model_name = 'efficientnetv2'
+        torch.onnx.export(model, input, '{}_fp32.onnx'.format(model_name), input_names=['input'], output_names=[
+                          'output'], dynamic_axes={'input': {0: 'batch_size'}, 'output': {0: 'batch_size'}})
+        model = model.cuda().half().eval()
+        torch.onnx.export(model, input.cuda().half(), '{}_fp16.onnx'.format(model_name), input_names=[
+                          'input'], output_names=['output'], dynamic_axes={'input': {0: 'batch_size'}, 'output': {0: 'batch_size'}})
+        return
 
     # to get loss value after evaluation
     loss_fn = torch.nn.CrossEntropyLoss().to(device)
-    val_loader= load_data(
-            subset_len=subset_len,
-            train=False,
-            batch_size=batch_size,
-            sample_method='',
-            data_dir=data_dir,
-            model_name=model_name)
-        
-    acc1_gen, acc5_gen, loss_gen = evaluate(model, val_loader, loss_fn, model_type, args.data_type)
+    val_loader = load_data(
+        subset_len=subset_len,
+        train=False,
+        batch_size=batch_size,
+        sample_method='',
+        data_dir=data_dir,
+        model_name=model_name)
+
+    acc1_gen, acc5_gen, loss_gen = evaluate(
+        model, val_loader, loss_fn, model_type, args.data_type)
 
     # logging accuracy
     print('top-1 / top-5 accuracy: %.1f / %.1f' % (acc1_gen, acc5_gen))
@@ -242,11 +239,9 @@ def main(model_name=''):
 
 if __name__ == '__main__':
 
-  model_name = args.model_name
-  print("-------- Start {} test ".format(model_name))
+    model_name = args.model_name
+    print("-------- Start {} test ".format(model_name))
 
-  main(model_name=args.model_name)
+    main(model_name=args.model_name)
 
-  print("-------- End of {} test ".format(model_name))
-
-
+    print("-------- End of {} test ".format(model_name))
