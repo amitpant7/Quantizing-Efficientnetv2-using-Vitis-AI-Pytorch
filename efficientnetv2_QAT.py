@@ -259,11 +259,8 @@ def quantization(title='optimize',
     else:
         device = torch.device("cuda")
 
-    model = efficientnet_v2_s()
-    num_ftrs = model.classifier[1].in_features
-    model.classifier[1] = nn.Linear(num_ftrs, 10)
     if file_path:
-        model.load_state_dict(torch.load(file_path))
+        model = torch.load(file_path)
         print("=== Load pretrained model ===")
 
     input = torch.randn([batch_size, 3, 224, 224]).to(device)
@@ -278,7 +275,8 @@ def quantization(title='optimize',
             # create inspector
             inspector = Inspector(target)  # by name
             # start to inspect
-            inspector.inspect(quant_model, (input,), device=device, output_dir="inspect", image_format="png" )
+            inspector.inspect(quant_model, (input,), device=device,
+                              output_dir="inspect", image_format="png")
             sys.exit()
     else:
         quantizer = torch_quantizer(

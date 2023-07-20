@@ -195,10 +195,7 @@ def main(model_name=''):
 
     print('Loading model:', args.model_path)
     if model_type == 'pth':
-        model = efficientnet_v2_s()
-        num_ftrs = model.classifier[1].in_features
-        model.classifier[1] = nn.Linear(num_ftrs, 10)
-        model.load_state_dict(torch.load(args.model_path))
+        model = torch.load(args.model_path)
         model = model.to(device)
         model.eval()
     else:
