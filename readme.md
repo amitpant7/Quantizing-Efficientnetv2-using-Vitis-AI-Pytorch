@@ -6,6 +6,7 @@
 5. [Model_info](#model_info)
 
 Main only contains the scripts to run quantization on efficientnetv2, check other branches for quantized models
+check replaced branch for efficientnetV2 with replaced activation function, hard swish.
 ### Installation
 
    1. Environment requirement
