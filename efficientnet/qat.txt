@@ -1,0 +1,5 @@
+-------- Start efficientnetv2 test 
+=== Load pretrained model ===
+loss: 0.00539609
+top-1 / top-5 accuracy: 100.0 / 100.0
+-------- End of efficientnetv2 test 

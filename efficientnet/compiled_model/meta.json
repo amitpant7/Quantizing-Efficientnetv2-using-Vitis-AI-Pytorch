@@ -1,0 +1,8 @@
+{
+    "lib": "libvart-dpu-runner.so",
+    "filename": "EfficientNetV2_comp.xmodel",
+    "kernel": [
+        "subgraph_EfficientNet__EfficientNet_AdaptiveAvgPool2d_avgpool__56751_fix"
+    ],
+    "target": "DPUCZDX8G_ISA1_B1024_0101000016010402"
+}
