@@ -7,7 +7,7 @@
 
   - Main only contains the scripts to run quantization on efficientnetv2, check other branches for quantized models
   - check replaced branch for efficientnetV2 with replaced activation function, hard swish.
-  - ---Compiled branch contains code for the compiled version of efficientnet v2 after sturctured pruning, quantization and compilation for DPU 1024, Zynq Mpsoc FPGA 
+  - Compiled branch contains code for the compiled version of efficientnet v2 after sturctured pruning, quantization and compilation for DPU 1024, Zynq Mpsoc FPGA 
 ### Installation
 
    1. Environment requirement
