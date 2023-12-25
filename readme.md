@@ -4,7 +4,7 @@
   - Compiled branch contains code for the compiled version of efficientnet v2 after sturctured pruning, quantization and compilation for DPU 1024, Zynq Mpsoc FPGA  
 
 ### Quantized and Compiled Model For deploying on FPGA 
-- Branch : https://github.com/amitpant7/Quantizing-Efficientnetv2-using-Vitis-AI-Pytorch/tree/compiled
+- Branch : [Compiled](https://github.com/amitpant7/Quantizing-Efficientnetv2-using-Vitis-AI-Pytorch/tree/compiled)
 ### Installation
 
    1. Environment requirement
