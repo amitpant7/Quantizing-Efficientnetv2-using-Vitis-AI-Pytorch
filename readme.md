@@ -31,10 +31,29 @@
 
 ### Quantization
    ```
-python ./code/test/efficientnetv2_quant.py --device "cpu" --quant_mode calib --subset_len 200
+python ./code/test/efficientnetv2_quant.py --device "cpu" --quant_mode calib --subset_len 1000
 
 ```
+To deploy model and export it in xmodel format:
+```
+sudo /opt/vitis_ai/conda/envs/vitis-ai-wego-torch/bin/python ./code/test/efficientnetv2_quant.py --quant_mode test --subset_len 1 --batch_size=1 --deploy 
 ```
 
-sudo /opt/vitis_ai/conda/envs/vitis-ai-wego-torch/bin/python ./code/test/efficientnetv2_quant.py --quant_mode test --subset_len 5 --batch_size=10 --deploy 
+Similarly for quantization-aware training  
+Fast fintune models 2000 images, calib 2000 images  
 ```
+export W_QUANT=1
+```
+```
+sudo /opt/vitis_ai/conda/envs/vitis-ai-wego-torch/bin/python code/efficientnetv2_QAT.py --device "cpu" --quant_mode calib --fast_finetune --subset_len 50
+```
+Test
+```
+python code/efficientnetv2_QAT.py --device "cpu" --quant_mode test --fast_finetune
+```
+--deploy
+ ```
+python code/efficientnetv2_QAT.py --device "cpu" --quant_mode test --fast_finetune --subset_len 1 --batch_size 1 --deploy
+```
+
+
