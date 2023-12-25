@@ -1,16 +1,10 @@
-### Contents
-1. [Installation](#installation)
-2. [Preparation](#preparation)
-3. [Evaluation](#evaluation)
-4. [Performance](#performance)
-5. [Model_info](#model_info)
 
-  - Main only contains the scripts to run quantization on efficientnetv2, check other branches for quantized models 
-  - check replaced branch for efficientnetV2 with replaced activation function, hard swish. 
-  - Compiled branch contains code for the compiled version of efficientnet v2 after sturctured pruning, quantization and compilation for DPU 1024, Zynq Mpsoc FPGA
+  - Main only contains the scripts to run quantization on efficientnetv2, check other branches for quantized models  
+  - check the replaced branch for efficientnetV2 with the replaced activation function, hard swish.  
+  - Compiled branch contains code for the compiled version of efficientnet v2 after sturctured pruning, quantization and compilation for DPU 1024, Zynq Mpsoc FPGA  
 
 ### Quantized and Compiled Model For deploying on FPGA 
-link: https://github.com/amitpant7/Quantizing-Efficientnetv2-using-Vitis-AI-Pytorch/tree/compiled/efficientnet/compiled_model 
+- Branch : https://github.com/amitpant7/Quantizing-Efficientnetv2-using-Vitis-AI-Pytorch/tree/compiled
 ### Installation
 
    1. Environment requirement
