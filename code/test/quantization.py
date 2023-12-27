@@ -2,7 +2,6 @@
 
 from tqdm import tqdm
 import torch.nn as nn
-from torchvision.models import efficientnet_v2_s
 import os
 import re
 import sys
@@ -19,7 +18,7 @@ import torch
 import torchvision
 import torchvision.transforms as transforms
 sys.path.append('./code/model/')
-# from efficientnet import efficientnet_v2_s
+
 
 
 # device = torch.device("cuda")
@@ -29,7 +28,10 @@ device = torch.device("cpu")
 parser = argparse.ArgumentParser()
 
 parser.add_argument('--input_shape', 
-                    help='Input shape that the model takes')
+                    help='List: Input shape that the model takes')
+
+parser.add_argument('--model_name', 
+                    help=' Name of the block')
 
 parser.add_argument(
     '--data_dir',
@@ -37,7 +39,7 @@ parser.add_argument(
     help='Data set directory, when quant_mode=calib, it is for calibration, while quant_mode=test it is for evaluation')
 parser.add_argument(
     '--model_dir',
-    default="./float/efficientnetv2.pth",
+    default="./float/model.pth",
     help='Trained model file path. Download pretrained model from the following url and put it in model_dir specified path: https://download.pytorch.org/models/resnet18-5c106cde.pth'
 )
 parser.add_argument(
@@ -77,83 +79,49 @@ parser.add_argument('--gpu', default=1, type=int,
                     help='GPU id to use.')
 parser.add_argument('--device', default='gpu',
                     choices=['gpu', 'cpu'], help='assign runtime device')
+
 args, _ = parser.parse_known_args()
 
+class RandomDataset(torch.utils.Dataset):
+    def __init__(self, in_shape, num_samples, transform = None):
+        self.data = torch.randn(num_samples, *in_shape)
+        self.transform = transform
 
-def load_data(train=True,
-              data_dir='data/CIFAR10',
-              batch_size=32,
+    def __len__(self):
+        return len(self.data)
+
+    def __getitem__(self, idx):
+        sample = self.data[idx]
+
+        if self.transform:
+            sample = self.transform(sample)
+
+        return sample
+
+
+
+
+def load_data(batch_size=32,
               subset_len=None,
               sample_method='random',
               distributed=False,
-              model_name='efficientnetv2',
               **kwargs):
 
     # prepare data
-    # random.seed(12345)
-    traindir = osp.join(data_dir, 'cifar10-python')
-    valdir = osp.join(data_dir, 'cifar10-python')
-    train_sampler = None
     normalize = transforms.Normalize(
         mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-    if model_name == 'inception_v3':
-        size = 299
-        resize = 299
-    else:
-        size = 224
-        resize = 224
-    if train:
-        dataset = torchvision.datasets.CIFAR10(
-            root=traindir,
-            train=True,
-            transform=transforms.Compose([
-                transforms.RandomResizedCrop(size),
-                transforms.RandomHorizontalFlip(),
-                transforms.ToTensor(),
-                normalize,
-            ]))
-        if subset_len:
-            assert subset_len <= len(dataset)
-            if sample_method == 'random':
-                dataset = torch.utils.data.Subset(
-                    dataset, random.sample(range(0, len(dataset)), subset_len))
-            else:
-                dataset = torch.utils.data.Subset(
-                    dataset, list(range(subset_len)))
-        if distributed:
-            train_sampler = torch.utils.data.distributed.DistributedSampler(
-                dataset)
-        data_loader = torch.utils.data.DataLoader(
-            dataset,
-            batch_size=batch_size,
-            shuffle=(train_sampler is None),
-            sampler=train_sampler,
-            **kwargs)
-    else:
-        dataset = torchvision.datasets.CIFAR10(root=valdir,
-                                               train=False,
-                                               download=False,
-                                               transform=transforms.Compose([
-                                                   transforms.Resize(224),
-                                                   transforms.ToTensor(),
-                                                   normalize]
-                                               ))
 
 
+    num_samples = subset_len
+    input_shape = args.input_shape
 
-        if subset_len:
-            assert subset_len <= len(dataset)
-            if sample_method == 'random':
-                dataset = torch.utils.data.Subset(
-                    dataset, random.sample(range(0, len(dataset)), subset_len))
-            else:
-                dataset = torch.utils.data.Subset(
-                    dataset, list(range(subset_len)))
-                
 
-        data_loader = torch.utils.data.DataLoader(
-            dataset, batch_size=batch_size, shuffle=False, **kwargs)
-    return data_loader, train_sampler
+    dataset = RandomDataset(input_shape, num_samples, transform= normalize)
+
+    data_loader = torch.utils.DataLoader(dataset=dataset, batch_size=batch_size, shuffle=True)
+
+
+    return data_loader
 
 
 class AverageMeter(object):
@@ -267,11 +235,8 @@ def quantization(title='optimize',
     loss_fn = torch.nn.CrossEntropyLoss().to(device)
     val_loader, _ = load_data(
         subset_len=subset_len,
-        train=False,
         batch_size=batch_size,
-        sample_method='random',
-        data_dir=data_dir,
-        model_name=model_name)
+        sample_method='random')
 
     acc1_gen, acc5_gen, loss_gen = evaluate(
         quant_model, val_loader, loss_fn, device)
@@ -291,7 +256,8 @@ def quantization(title='optimize',
 
 if __name__ == '__main__':
 
-    model_name = 'efficientnetv2'
+    model_name = args.model_name
+    
     file_path = args.model_dir
 
     feature_test = ' float model evaluation'
