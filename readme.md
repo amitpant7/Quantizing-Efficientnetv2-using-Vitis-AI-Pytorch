@@ -56,4 +56,3 @@ python code/efficientnetv2_QAT.py --device "cpu" --quant_mode test --fast_finetu
 python code/efficientnetv2_QAT.py --device "cpu" --quant_mode test --fast_finetune --subset_len 1 --batch_size 1 --deploy
 ```
 
-
