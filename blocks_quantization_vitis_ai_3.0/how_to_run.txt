@@ -1,0 +1,5 @@
+# To quantize certain block of model 
+/opt/vitis_ai/conda/envs/vitis-ai-pytorch/bin/python code/quantization.py --device "cpu" --quant_mode calib --subset_len 1000 --model_name "first2_13blocks.pth" --input_shape [3,224,224]
+
+# To deploy model and get the qunatized model in (onnx, pth, xmodel formta)
+sudo /opt/vitis_ai/conda/envs/vitis-ai-pytorch/bin/python ./code/quantization.py --quant_mode test --subset_len 1 --batch_size=1 --deploy --model_name "first2_13blocks.pth" --input_shape [3,224,224]
