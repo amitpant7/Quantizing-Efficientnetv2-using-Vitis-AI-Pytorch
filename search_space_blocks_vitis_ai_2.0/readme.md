@@ -1,0 +1,3 @@
+Contains the code that i used to quantize the different blocks that I created to in order to build a latency table. I group blocks that has same input into sigle model this model will be deploy to fpga and latency of each block will be caluclted. Each block is  MBconv block with different configuration.  
+
+Place the model inside /float
