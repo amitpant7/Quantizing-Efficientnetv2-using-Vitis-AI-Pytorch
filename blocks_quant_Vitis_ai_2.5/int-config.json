@@ -1,0 +1,22 @@
+{
+"convert_relu6_to_relu": false,
+"include_cle": true,
+"include_bias_corr": true,
+"target_device": "DPU",
+"quantizable_data_type": [
+ "input", 
+ "weights", 
+ "bias", 
+ "activation"],
+ "overall_quantize_config": {
+"datatype": "int",
+"bit_width": 8, 
+"method": "maxmin", 
+"round_mode": "std_round", 
+"symmetry": true, 
+"per_channel": false, 
+"signed": true, 
+"narrow_range": false, 
+"scale_type": "poweroftwo", 
+"calib_statistic_method": "modal"
+}}
