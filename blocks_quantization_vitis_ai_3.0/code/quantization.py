@@ -119,7 +119,7 @@ def load_data(
         mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]
     )
 
-    dataset = RandomDataset(input_shape, subset_len, transform=normalize)
+    dataset = RandomDataset(input_shape, subset_len)
 
     data_loader = torch.utils.data.DataLoader(
         dataset=dataset, batch_size=batch_size, shuffle=True
