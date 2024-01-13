@@ -2,17 +2,19 @@ import torch
 import torch.nn as nn
 
 class myModel(nn.Module):
-    def __init__(self, layers):
+    def __init__(self, layers, input):
         super(myModel, self).__init__()
-
+        self.first = nn.Conv2d(in_channels= input[1], out_channels= input[1], kernel_size= 1)
         self.blocks = nn.ModuleList(layers)
 
     def forward(self, x):
         output = []
+        y = self.first(x)
         for i, _ in enumerate(self.blocks):
-            y = self.blocks[i](x)
-            output.append(y)
+             y1 = self.blocks[i](y)
+             output.append(y1)
         return output
+
 
 
 class MyLargeModel(nn.Module):
