@@ -1,0 +1,8 @@
+{
+    "lib": "libvart-dpu-runner.so",
+    "filename": "ResidualBlock-in_48x28x28-out_48-k_3-e_6-s_1-act_relu-use_se_True.xmodel",
+    "kernel": [
+        "subgraph_ResidualBlock__ResidualBlock_MBConvLayer_conv__Sequential_depth_conv__Conv2d_conv__ret_9"
+    ],
+    "target": "DPUCZDX8G_ISA1_B2304_0101000016010405"
+}

@@ -2,73 +2,49 @@ digraph ResidualBlock {
 	input_0 [label="type:nndct_input
 name:ResidualBlock::input_0
 assigned device:user
-out shape:[[1, 14, 14, 136]]" color=black]
+out shape:[[1, 14, 14, 96]]" color=black]
 	"ResidualBlock/MBConvLayer[conv]/Sequential[inverted_bottleneck]/Conv2d[conv]/ret.3" [label="type:nndct_conv2d
 name:ResidualBlock::ResidualBlock/MBConvLayer[conv]/Sequential[inverted_bottleneck]/Conv2d[conv]/ret.3
 assigned device:dpu
-out shape:[[1, 14, 14, 544]]" color=blue]
-	"ResidualBlock/MBConvLayer[conv]/Sequential[inverted_bottleneck]/Hardswish[act]/1293" [label="type:nndct_hswish
-name:ResidualBlock::ResidualBlock/MBConvLayer[conv]/Sequential[inverted_bottleneck]/Hardswish[act]/1293
+out shape:[[1, 14, 14, 384]]" color=blue]
+	"ResidualBlock/MBConvLayer[conv]/Sequential[inverted_bottleneck]/Hardswish[act]/ret.7" [label="type:nndct_hswish
+name:ResidualBlock::ResidualBlock/MBConvLayer[conv]/Sequential[inverted_bottleneck]/Hardswish[act]/ret.7
 assigned device:dpu
-out shape:[[1, 14, 14, 544]]" color=blue]
-	"ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/Conv2d[conv]/ret.7" [label="type:nndct_depthwise_conv2d
-name:ResidualBlock::ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/Conv2d[conv]/ret.7
+out shape:[[1, 14, 14, 384]]" color=blue]
+	"ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/Conv2d[conv]/ret.9" [label="type:nndct_depthwise_conv2d
+name:ResidualBlock::ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/Conv2d[conv]/ret.9
 assigned device:dpu
-out shape:[[1, 14, 14, 544]]" color=blue]
-	"ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/Hardswish[act]/1321" [label="type:nndct_hswish
-name:ResidualBlock::ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/Hardswish[act]/1321
+out shape:[[1, 14, 14, 384]]" color=blue]
+	"ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/Hardswish[act]/ret.13" [label="type:nndct_hswish
+name:ResidualBlock::ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/Hardswish[act]/ret.13
 assigned device:dpu
-out shape:[[1, 14, 14, 544]]" color=blue]
-	"ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/Hardswish[act]/1321_sink_transpose_0" [label="type:nndct_permute
-name:ResidualBlock::ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/Hardswish[act]/1321_sink_transpose_0
-assigned device:cpu
-out shape:[[1, 544, 14, 14]]" color=red]
-	"ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SEModule[se]/1327" [label="type:aten::mean
-name:ResidualBlock::ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SEModule[se]/1327
-assigned device:cpu
-out shape:[[1, 544, 14, 1]]" color=red]
-	"ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SEModule[se]/1334" [label="type:aten::mean
-name:ResidualBlock::ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SEModule[se]/1334
-assigned device:cpu
-out shape:[[1, 544, 1, 1]]" color=red]
-	"ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SEModule[se]/1334_swim_transpose_1" [label="type:nndct_reshape
-name:ResidualBlock::ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SEModule[se]/1334_swim_transpose_1
-assigned device:cpu
-out shape:[[1, 1, 1, 544]]" color=red]
-	"ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SEModule[se]/SqueezeExcitation[fc]/AdaptiveAvgPool2d[avgpool]/1384" [label="type:nndct_avgpool
-name:ResidualBlock::ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SEModule[se]/SqueezeExcitation[fc]/AdaptiveAvgPool2d[avgpool]/1384
+out shape:[[1, 14, 14, 384]]" color=blue]
+	"ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SqueezeExcitation[se]/AdaptiveAvgPool2d[avgpool]/1195" [label="type:nndct_avgpool
+name:ResidualBlock::ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SqueezeExcitation[se]/AdaptiveAvgPool2d[avgpool]/1195
 assigned device:dpu
-out shape:[[1, 1, 1, 544]]" color=blue]
-	"ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SEModule[se]/SqueezeExcitation[fc]/Conv2d[fc1]/ret.11" [label="type:nndct_conv2d
-name:ResidualBlock::ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SEModule[se]/SqueezeExcitation[fc]/Conv2d[fc1]/ret.11
+out shape:[[1, 1, 1, 384]]" color=blue]
+	"ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SqueezeExcitation[se]/Conv2d[fc1]/ret.15" [label="type:nndct_conv2d
+name:ResidualBlock::ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SqueezeExcitation[se]/Conv2d[fc1]/ret.15
 assigned device:dpu
-out shape:[[1, 1, 1, 136]]" color=blue]
-	"ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SEModule[se]/SqueezeExcitation[fc]/ReLU[activation]/ret.13" [label="type:nndct_relu
-name:ResidualBlock::ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SEModule[se]/SqueezeExcitation[fc]/ReLU[activation]/ret.13
+out shape:[[1, 1, 1, 96]]" color=blue]
+	"ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SqueezeExcitation[se]/ReLU[activation]/ret.17" [label="type:nndct_relu
+name:ResidualBlock::ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SqueezeExcitation[se]/ReLU[activation]/ret.17
 assigned device:dpu
-out shape:[[1, 1, 1, 136]]" color=blue]
-	"ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SEModule[se]/SqueezeExcitation[fc]/Conv2d[fc2]/ret.15" [label="type:nndct_conv2d
-name:ResidualBlock::ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SEModule[se]/SqueezeExcitation[fc]/Conv2d[fc2]/ret.15
+out shape:[[1, 1, 1, 96]]" color=blue]
+	"ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SqueezeExcitation[se]/Conv2d[fc2]/ret.19" [label="type:nndct_conv2d
+name:ResidualBlock::ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SqueezeExcitation[se]/Conv2d[fc2]/ret.19
 assigned device:dpu
-out shape:[[1, 1, 1, 544]]" color=blue]
-	"ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SEModule[se]/SqueezeExcitation[fc]/Hardsigmoid[scale_activation]/ret.17" [label="type:nndct_hsigmoid
-name:ResidualBlock::ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SEModule[se]/SqueezeExcitation[fc]/Hardsigmoid[scale_activation]/ret.17
+out shape:[[1, 1, 1, 384]]" color=blue]
+	"ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SqueezeExcitation[se]/Hardsigmoid[scale_activation]/ret.21" [label="type:nndct_hsigmoid
+name:ResidualBlock::ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SqueezeExcitation[se]/Hardsigmoid[scale_activation]/ret.21
 assigned device:dpu
-out shape:[[1, 1, 1, 544]]" color=blue]
-	"ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SEModule[se]/SqueezeExcitation[fc]/ret.19" [label="type:nndct_elemwise_mul
-name:ResidualBlock::ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SEModule[se]/SqueezeExcitation[fc]/ret.19
+out shape:[[1, 1, 1, 384]]" color=blue]
+	"ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SqueezeExcitation[se]/ret.23" [label="type:nndct_elemwise_mul
+name:ResidualBlock::ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SqueezeExcitation[se]/ret.23
 assigned device:dpu
-out shape:[[1, 1, 1, 544]]" color=blue]
-	"ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SEModule[se]/ret.21" [label="type:nndct_elemwise_mul
-name:ResidualBlock::ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SEModule[se]/ret.21
-assigned device:dpu
-out shape:[[1, 14, 14, 544]]" color=blue]
-	"ResidualBlock/MBConvLayer[conv]/Sequential[point_linear]/Conv2d[conv]/ret.23" [label="type:nndct_conv2d
-name:ResidualBlock::ResidualBlock/MBConvLayer[conv]/Sequential[point_linear]/Conv2d[conv]/ret.23
-assigned device:dpu
-out shape:[[1, 14, 14, 136]]" color=blue]
-	"ResidualBlock/ret" [label="type:nndct_elemwise_add
-name:ResidualBlock::ResidualBlock/ret
+out shape:[[1, 14, 14, 384]]" color=blue]
+	"ResidualBlock/MBConvLayer[conv]/Sequential[point_linear]/Conv2d[conv]/ret.25" [label="type:nndct_conv2d
+name:ResidualBlock::ResidualBlock/MBConvLayer[conv]/Sequential[point_linear]/Conv2d[conv]/ret.25
 assigned device:dpu
 out shape:[[1, 14, 14, 136]]" color=blue]
 	return_0 [label="type:nndct_return
@@ -76,24 +52,16 @@ name:ResidualBlock::return_0
 assigned device:user
 out shape:[]" color=black]
 	input_0 -> "ResidualBlock/MBConvLayer[conv]/Sequential[inverted_bottleneck]/Conv2d[conv]/ret.3"
-	input_0 -> "ResidualBlock/ret"
-	"ResidualBlock/MBConvLayer[conv]/Sequential[inverted_bottleneck]/Conv2d[conv]/ret.3" -> "ResidualBlock/MBConvLayer[conv]/Sequential[inverted_bottleneck]/Hardswish[act]/1293"
-	"ResidualBlock/MBConvLayer[conv]/Sequential[inverted_bottleneck]/Hardswish[act]/1293" -> "ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/Conv2d[conv]/ret.7"
-	"ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/Conv2d[conv]/ret.7" -> "ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/Hardswish[act]/1321"
-	"ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/Hardswish[act]/1321" -> "ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SEModule[se]/ret.21"
-	"ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/Hardswish[act]/1321" -> "ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/Hardswish[act]/1321_sink_transpose_0"
-	"ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/Hardswish[act]/1321_sink_transpose_0" -> "ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SEModule[se]/1327"
-	"ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SEModule[se]/1327" -> "ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SEModule[se]/1334"
-	"ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SEModule[se]/1334" -> "ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SEModule[se]/1334_swim_transpose_1"
-	"ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SEModule[se]/1334_swim_transpose_1" -> "ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SEModule[se]/SqueezeExcitation[fc]/ret.19"
-	"ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SEModule[se]/1334_swim_transpose_1" -> "ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SEModule[se]/SqueezeExcitation[fc]/AdaptiveAvgPool2d[avgpool]/1384"
-	"ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SEModule[se]/SqueezeExcitation[fc]/AdaptiveAvgPool2d[avgpool]/1384" -> "ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SEModule[se]/SqueezeExcitation[fc]/Conv2d[fc1]/ret.11"
-	"ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SEModule[se]/SqueezeExcitation[fc]/Conv2d[fc1]/ret.11" -> "ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SEModule[se]/SqueezeExcitation[fc]/ReLU[activation]/ret.13"
-	"ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SEModule[se]/SqueezeExcitation[fc]/ReLU[activation]/ret.13" -> "ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SEModule[se]/SqueezeExcitation[fc]/Conv2d[fc2]/ret.15"
-	"ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SEModule[se]/SqueezeExcitation[fc]/Conv2d[fc2]/ret.15" -> "ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SEModule[se]/SqueezeExcitation[fc]/Hardsigmoid[scale_activation]/ret.17"
-	"ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SEModule[se]/SqueezeExcitation[fc]/Hardsigmoid[scale_activation]/ret.17" -> "ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SEModule[se]/SqueezeExcitation[fc]/ret.19"
-	"ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SEModule[se]/SqueezeExcitation[fc]/ret.19" -> "ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SEModule[se]/ret.21"
-	"ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SEModule[se]/ret.21" -> "ResidualBlock/MBConvLayer[conv]/Sequential[point_linear]/Conv2d[conv]/ret.23"
-	"ResidualBlock/MBConvLayer[conv]/Sequential[point_linear]/Conv2d[conv]/ret.23" -> "ResidualBlock/ret"
-	"ResidualBlock/ret" -> return_0
+	"ResidualBlock/MBConvLayer[conv]/Sequential[inverted_bottleneck]/Conv2d[conv]/ret.3" -> "ResidualBlock/MBConvLayer[conv]/Sequential[inverted_bottleneck]/Hardswish[act]/ret.7"
+	"ResidualBlock/MBConvLayer[conv]/Sequential[inverted_bottleneck]/Hardswish[act]/ret.7" -> "ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/Conv2d[conv]/ret.9"
+	"ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/Conv2d[conv]/ret.9" -> "ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/Hardswish[act]/ret.13"
+	"ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/Hardswish[act]/ret.13" -> "ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SqueezeExcitation[se]/AdaptiveAvgPool2d[avgpool]/1195"
+	"ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/Hardswish[act]/ret.13" -> "ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SqueezeExcitation[se]/ret.23"
+	"ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SqueezeExcitation[se]/AdaptiveAvgPool2d[avgpool]/1195" -> "ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SqueezeExcitation[se]/Conv2d[fc1]/ret.15"
+	"ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SqueezeExcitation[se]/Conv2d[fc1]/ret.15" -> "ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SqueezeExcitation[se]/ReLU[activation]/ret.17"
+	"ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SqueezeExcitation[se]/ReLU[activation]/ret.17" -> "ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SqueezeExcitation[se]/Conv2d[fc2]/ret.19"
+	"ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SqueezeExcitation[se]/Conv2d[fc2]/ret.19" -> "ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SqueezeExcitation[se]/Hardsigmoid[scale_activation]/ret.21"
+	"ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SqueezeExcitation[se]/Hardsigmoid[scale_activation]/ret.21" -> "ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SqueezeExcitation[se]/ret.23"
+	"ResidualBlock/MBConvLayer[conv]/Sequential[depth_conv]/SqueezeExcitation[se]/ret.23" -> "ResidualBlock/MBConvLayer[conv]/Sequential[point_linear]/Conv2d[conv]/ret.25"
+	"ResidualBlock/MBConvLayer[conv]/Sequential[point_linear]/Conv2d[conv]/ret.25" -> return_0
 }
