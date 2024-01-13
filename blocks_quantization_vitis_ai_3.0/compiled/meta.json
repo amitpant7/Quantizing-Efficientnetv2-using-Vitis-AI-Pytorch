@@ -1,13 +1,9 @@
 {
     "lib": "libvart-dpu-runner.so",
-    "filename": "ResidualBlock-in_136x14x14-out_136-k_3-s_1-act_h_swish-use_se_True.pth.xmodel",
+    "filename": "ResidualBlock-in_136x14x14-out_136-k_3-e_4-s_1-act_h_swish-use_se_True.pth.xmodel",
     "kernel": [
-        "subgraph_ResidualBlock__ResidualBlock_MBConvLayer_conv__Sequential_depth_conv__SEModule_se__Sequential_fc__Conv2d_expand__875",
-        "subgraph_ResidualBlock__ResidualBlock_MBConvLayer_conv__Sequential_depth_conv__Conv2d_conv__input_7",
-        "subgraph_ResidualBlock__ResidualBlock_910",
-        "subgraph_ResidualBlock__ResidualBlock_MBConvLayer_conv__Sequential_depth_conv__Hswish_act__824",
-        "subgraph_ResidualBlock__ResidualBlock_MBConvLayer_conv__Sequential_inverted_bottleneck__Hswish_act__792",
-        "subgraph_ResidualBlock__ResidualBlock_MBConvLayer_conv__Sequential_inverted_bottleneck__Conv2d_conv__input_3"
+        "subgraph_ResidualBlock__ResidualBlock_MBConvLayer_conv__Sequential_depth_conv__Conv2d_conv__ret_7",
+        "subgraph_ResidualBlock__ResidualBlock_MBConvLayer_conv__Sequential_depth_conv__SEModule_se__1334_swim_transpose_1"
     ],
     "target": "DPUCZDX8G_ISA1_B2304_0101000016010405"
 }

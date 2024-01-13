@@ -2,7 +2,7 @@ import torch
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-model = torch.load('float/ResidualBlock-in_136x14x14-out_136-k_3-s_1-act_h_swish-use_se_True.pth')
+model = torch.load('float/ResidualBlock-in_136x14x14-out_136-k_3-e_4-s_1-act_h_swish-use_se_True.pth')
 model = model.to(device)
 
 
