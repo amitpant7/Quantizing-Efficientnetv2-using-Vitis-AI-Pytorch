@@ -6,7 +6,7 @@
 ### Quantized and Compiled Model For deploying on FPGA 
 - Branch : [Compiled](https://github.com/amitpant7/Quantizing-Efficientnetv2-using-Vitis-AI-Pytorch/tree/compiled)
 ### Creating blocks to Deploy in FPGA for Latency Table Construction 
-- Branch: [qt_for_latency_blocks]
+- Branch: [qt_for_latency_blocks](https://github.com/amitpant7/Quantizing-Efficientnetv2-using-Vitis-AI-Pytorch/tree/qt_for_latency_blocks)
 ### Installation
 
    1. Environment requirement
