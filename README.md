@@ -6,3 +6,5 @@ To compile the blocks
 ```
 To Comile for other fpga boards change arch.json file accordingly.  
 Log file contains logs of compilation process.
+
+All this was done so that each block can be deployed in FPGA to measure the latency in order to build Latency table that can be utilized to in HW_NAS process.
