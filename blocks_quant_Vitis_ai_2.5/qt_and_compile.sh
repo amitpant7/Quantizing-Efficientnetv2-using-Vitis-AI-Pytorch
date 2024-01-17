@@ -7,13 +7,12 @@ for file in ./float/*
 do
 if [ -f "$file" ]; then 
     name=$(echo "$file" | sed 's|./float/||') 
-    in_shape=$(echo "$name" | grep -o 'in_.*-out' | sed 's/in_//;s/-out//')
-    IFS='x'
-   
+
     echo -----------------------Strating Qt $name -----------------------------
 
     #convert to list[]
-    read -ra input_shape<<< $in_shape
+    IFS='_.' read -ra in_shape <<< "$name"
+    in_shape=("${in_shape[@]:1:3}")
     input=$(echo [${input_shape[0]}, ${input_shape[1]}, ${input_shape[2]}])
 
     #  To quantize certain block of model 
